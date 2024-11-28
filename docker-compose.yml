@@ -1,0 +1,36 @@
+version: "3.9"
+
+networks:
+  etnair_network:
+    driver: bridge #Mode par default
+
+services:
+  db:
+    image: postgres:17.2-alpine3.20
+    container_name: etnair_db
+    restart: always
+    environment:
+      POSTGRES_USER: etnair_user
+      POSTGRES_PASSWORD: etnair_pass
+      POSTGRES_DB: etnair_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - etnair_network
+
+  api:
+    build: ./api
+    container_name: etnair_api
+    environment:
+      DB_HOST: etnair_db
+      DB_USER: etnair_user
+      DB_PASSWORD: etnair_pass
+      DB_NAME: etnair_db
+    ports:
+      - "3000:3000" #gauche pc droite conteneur
+    networks:
+      - etnair_network
+
+volumes:
+  db_data:
+    driver: local
