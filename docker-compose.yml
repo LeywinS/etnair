@@ -1,5 +1,3 @@
-version: "3.9"
-
 networks:
   etnair_network:
     driver: bridge #Mode par default
